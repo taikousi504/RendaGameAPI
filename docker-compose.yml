@@ -1,0 +1,45 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: RendaGame
+    volumes:
+      - /usr/src/node_modules
+      - .:/usr/src/app
+    command: yarn dev
+    ports:
+      - "3000:3000"
+      - "5555:5555"
+
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: kousi
+      POSTGRES_PASSWORD: kousi504
+      PGPASSWORD: kousi504
+      POSTGRES_DB: RendaGame
+      TZ: "Asia/Tokyo"
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - 81:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: taikousi504@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: kousi504
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    depends_on:
+      - postgres
+
+volumes:
+  postgres:
+  pgadmin:

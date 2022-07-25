@@ -1,0 +1,31 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["debian-openssl-1.1.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model score_ranking {
+  ID         Int            @id @default(autoincrement())
+  score      Int
+  user_id    Int
+  CREATED_AT DateTime       @default(now())
+  UPDATED_AT DateTime       @updatedAt
+}
+
+model users {
+  ID            Int             @id @default(autoincrement())
+  name          String          @db.VarChar(255)  @unique
+  password      String          @db.VarChar(255)
+  salt          String          @db.VarChar(255)
+  access_token  String?         @db.VarChar(255)
+  expired_at    DateTime
+  CREATED_AT    DateTime        @default(now())
+  UPDATED_AT    DateTime        @updatedAt
+}
