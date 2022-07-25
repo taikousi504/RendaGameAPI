@@ -25,7 +25,6 @@ model users {
   password      String          @db.VarChar(255)
   salt          String          @db.VarChar(255)
   access_token  String?         @db.VarChar(255)
-  expired_at    DateTime
   CREATED_AT    DateTime        @default(now())
   UPDATED_AT    DateTime        @updatedAt
 }

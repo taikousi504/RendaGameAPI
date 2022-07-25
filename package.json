@@ -9,7 +9,7 @@
     "build": "npx tsc",
     "build:watch": "npx tsc -w",
     "dev": "yarn run build:watch & yarn startDev",
-    "heroku-postbuild": "yarn add -D"
+    "heroku-postbuild": "yarn add -D "
   },
   "description": "renda is power.",
   "devDependencies": {
