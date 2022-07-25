@@ -11,9 +11,6 @@
     "dev": "yarn run build:watch & yarn startDev",
     "heroku-postbuild": "yarn add -D"
   },
-  "engines": {
-    "node": "16.x"
-  },
   "description": "renda is power.",
   "devDependencies": {
     "@types/express": "^4.17.13",
@@ -30,5 +27,8 @@
   },
   "dependencies": {
     "@prisma/client": "^4.1.0"
+  },
+  "engines": {
+    "node": "16.x"
   }
 }
