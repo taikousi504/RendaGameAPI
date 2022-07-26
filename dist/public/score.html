@@ -29,8 +29,12 @@ $(function(){
                     $('#p1').html("ユーザーが見つかりません。");
                 }
                 else{
-                    $('#p1').html("パスワードが違います。");
+                    $('#p1').html("ログインに失敗しました。");
                 }
+                return;
+            }
+            else if (data.login_status == 0){
+                $('#p1').html("ログインに失敗しました。<br>パスワードが違います。");
                 return;
             }
 
