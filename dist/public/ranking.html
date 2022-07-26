@@ -12,7 +12,7 @@ $(function(){
         }).done(function(json){
             var text = "";
                 for (var i = 0; i < json.length; i++){
-                    text += (i + ". " + json[i].name + " Score:" + json[i].score + "<br>");
+                    text += ((i + 1) + ". " + json[i].name + " Score:" + json[i].score + "<br>");
                 }
             $('#p1').html(text);
         });
