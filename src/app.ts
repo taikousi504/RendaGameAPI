@@ -16,7 +16,7 @@ app.use(express.urlencoded({extended: true}));
 const prisma = new PrismaClient();
 
 let port = process.env.PORT;
-if (port == null || port == ""){
+if (port == null || port == undefined){
     port = 3000;
 }
 app.listen(port, () => {
@@ -24,13 +24,8 @@ app.listen(port, () => {
 });
 
 app.get('/', (req, res) => {
-    res.send('Hello World!');
+    res.sendFile(__dirname + '/public/index.html');
 })
-
-type SendScoreData = {
-    name: string,
-    score: number,
-};
 
 //一覧取得
 app.get('/rendagame', async (req, res) => {
@@ -99,7 +94,7 @@ app.get('/rendagame', async (req, res) => {
     const count = scores.length;
 
     var array = [];
-;    for (var i = 0; i < count; i++){
+    for (var i = 0; i < count; i++){
         var json = {"name": name, "score": scores[i].score};
         array.push(json);
     }

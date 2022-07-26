@@ -26,14 +26,14 @@ app.use(express_1.default.urlencoded({ extended: true }));
 // }))
 const prisma = new client_1.PrismaClient();
 let port = process.env.PORT;
-if (port == null || port == "") {
+if (port == null || port == undefined) {
     port = 3000;
 }
 app.listen(port, () => {
     console.log(`Start on port 3000.`);
 });
 app.get('/', (req, res) => {
-    res.send('Hello World!');
+    res.sendFile(__dirname + '/public/index.html');
 });
 //一覧取得
 app.get('/rendagame', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -93,7 +93,6 @@ app.get('/rendagame', (req, res) => __awaiter(void 0, void 0, void 0, function* 
     //結合して出力
     const count = scores.length;
     var array = [];
-    ;
     for (var i = 0; i < count; i++) {
         var json = { "name": name, "score": scores[i].score };
         array.push(json);
