@@ -196,16 +196,33 @@ app.get('/ranking', async (req, res) => {
 app.post("/users/new", async (req, res) => {
     const name = req.body.name;
     const salt = await crypto.randomBytes(8).toString('hex');
+    const srcPassword = req.body.password;
     const password = await crypto.createHash('sha256').update(req.body.password + salt + process.env.PEPPER, 'utf8').digest('hex');
 
-    const result = await prisma.users.create({
-        data: {
-            name,
-            password,
-            salt,
-        },
-    });
-    return res.json(result);
+    //ユーザー名の長さエラー
+    if (name.length < 4 || name.length > 20){
+        return res.json({signup_status: 2});
+    }
+    //パスワードの長さエラー
+    else if (srcPassword.length < 4 || name.length > 20){
+        return res.json({signup_status: 3});
+    }
+
+    try{
+        const result = await prisma.users.create({
+            data: {
+                name,
+                password,
+                salt,
+            },
+        });    
+    }
+    catch(e){
+        //何らかのエラー
+        return res.json({signup_status: 0});
+    }
+    //登録成功
+    return res.json({signup_status: 1});
 });
 
 //ログイン (ユーザー名とパスワードからトークン発行)
