@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>WebAppTest</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>     
+<script>
+$(function(){
+    $('#btn1').click(function(){
+        $.ajax({
+            url: 'https://renda-game.herokuapp.com/users/login',
+            type: 'post',
+            data: {
+                "name": "kousi",
+                "password": "kousi504",
+            }
+        }).done(function(data){
+            $.ajax({
+                url: 'https://renda-game.herokuapp.com/score',
+                type: 'get',
+                headers: {
+                    'access-token': data.accessToken,
+                },
+            }).done(function(json){
+                var text = "";
+                    for (var i = 0; i < json.length; i++){
+                        text += (i + ". " + json[i].name + " Score:" + json[i].score + "<br>");
+                    }
+                $('#p1').html(text);
+            });
+        });
+    });
+});
+</script>
+</head>
+<body>
+    <input type="button" id="btn1" value="GET">
+    <p id="p1"></p>
+</body>
+</html>

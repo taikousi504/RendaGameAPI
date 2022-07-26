@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>WebAppTest</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>     
+<script>
+$(function(){
+    $.ajax({
+            url: 'https://renda-game.herokuapp.com/ranking',
+            type: 'get',
+        }).done(function(json){
+            var text = "";
+                for (var i = 0; i < json.length; i++){
+                    text += (i + ". " + json[i].name + " Score:" + json[i].score + "<br>");
+                }
+            $('#p1').html(text);
+        });
+});
+</script>
+</head>
+<body>
+    <p id="p1"></p>
+</body>
+</html>

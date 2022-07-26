@@ -27,8 +27,8 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 })
 
-//一覧取得
-app.get('/rendagame', async (req, res) => {
+//1ユーザーのスコア一覧取得
+app.get('/score', async (req, res) => {
     //アクセストークン確認
     const accessToken = req.header('access-token');
 
@@ -102,8 +102,8 @@ app.get('/rendagame', async (req, res) => {
     return res.json(array);
 });
 
-//新規作成
-app.post('/rendagame', async (req, res) => {
+//スコア新規作成
+app.post('/score', async (req, res) => {
     const score = req.body.score;
     //アクセストークン確認
     const accessToken = req.header('access-token');
@@ -140,6 +140,49 @@ app.post('/rendagame', async (req, res) => {
     });
     return res.json(result);
 } );
+
+//全スコア一覧取得
+app.get('/ranking', async (req, res) => {
+    //スコア取得(降順)
+    const scores = await prisma.score_ranking.findMany({
+        orderBy: {
+            score: "desc",
+        },
+    });
+
+    if (scores.length <= 0){
+        return res.json({});
+    }
+
+    //結合して出力
+    const count = scores.length;
+
+    var array = [];
+    for (var i = 0; i < count; i++){
+        //名前取得
+        var name = await prisma.users.findFirst({
+            where: {
+                ID: scores[i].user_id,
+            },
+        }).then(function(rows){
+            if (rows != null){
+                return rows.name;
+            }
+            else {
+                return null;
+            }
+        });
+
+        if (name == null || name == undefined){
+            name = "Anonymous";
+        }
+        
+        var json = {"name": name, "score": scores[i].score};
+        array.push(json);
+    }
+
+    return res.json(array);
+});
 
 //新規ユーザー登録
 app.post("/users/new", async (req, res) => {
