@@ -3,15 +3,15 @@ import { PrismaClient } from '@prisma/client';
 import crypto from "crypto";
 
 const app: express.Express = express();
-const cors = require('cors');
+///const cors = require('cors');
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-app.use(cors({
-    origin: 'http://localhost:3000',
-    credentials: true,
-    optionsSuccessStatus: 200
-}));
+// app.use(cors({
+//     origin: 'http://localhost:3000',
+//     credentials: true,
+//     optionsSuccessStatus: 200
+// }));
 
 const prisma = new PrismaClient();
 
