@@ -24,6 +24,17 @@ $(function(){
                 "password": $("#password").val(),
             }
         }).done(function(data){
+            if (typeof(data.login_status) == "string"){
+                if (data.login_status == "No User Found."){
+                    $('#p1').html("ユーザーが見つかりません。");
+                    return;
+                }
+                else{
+                    $('#p1').html("パスワードが違います。");
+                    return;
+                }
+            }
+
             $.ajax({
                 url: 'https://renda-game.herokuapp.com/score',
                 type: 'get',
