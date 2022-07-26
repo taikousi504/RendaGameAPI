@@ -25,7 +25,7 @@ $(function(){
             }
         }).done(function(data){
             if (typeof data.login_status === 'string'){
-                if (data.login_status == "No User Found."){
+                if (data.login_status == "No User found."){
                     $('#p1').html("ユーザーが見つかりません。");
                 }
                 else{
