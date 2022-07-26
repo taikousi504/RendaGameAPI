@@ -204,7 +204,7 @@ app.post("/users/new", async (req, res) => {
         return res.json({signup_status: 2});
     }
     //パスワードの長さエラー
-    else if (srcPassword.length < 4 || name.length > 20){
+    else if (srcPassword.length < 4 || srcPassword.length > 20){
         return res.json({signup_status: 3});
     }
 
