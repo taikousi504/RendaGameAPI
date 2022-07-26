@@ -22,7 +22,7 @@ $(function(){
                     'access-token': data.accessToken,
                 },
             }).done(function(json){
-                var text = "0";
+                var text = "";
     ;               for (var i = 0; i < json.length; i++){
                         text += ("Score[" + i + "].score:" + json[i].score + "<br>");
                     }
