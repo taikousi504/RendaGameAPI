@@ -179,15 +179,41 @@ app.get('/ranking', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 app.post("/users/new", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const name = req.body.name;
     const salt = yield crypto_1.default.randomBytes(8).toString('hex');
+    const srcPassword = req.body.password;
     const password = yield crypto_1.default.createHash('sha256').update(req.body.password + salt + process.env.PEPPER, 'utf8').digest('hex');
-    const result = yield prisma.users.create({
-        data: {
-            name,
-            password,
-            salt,
+    //ユーザー名の長さエラー
+    if (name.length < 4 || name.length > 20) {
+        return res.json({ signup_status: 2 });
+    }
+    //パスワードの長さエラー
+    else if (srcPassword.length < 4 || srcPassword.length > 20) {
+        return res.json({ signup_status: 3 });
+    }
+    //ユーザーが存在しているかチェック
+    var users = yield prisma.users.findMany({
+        where: {
+            name: name
         },
     });
-    return res.json(result);
+    //見つかったらエラーとしてリターン
+    if (users.length > 0) {
+        return res.json({ signup_status: 4 });
+    }
+    try {
+        const result = yield prisma.users.create({
+            data: {
+                name,
+                password,
+                salt,
+            },
+        });
+    }
+    catch (e) {
+        //何らかのエラー
+        return res.json({ signup_status: 0 });
+    }
+    //登録成功
+    return res.json({ signup_status: 1 });
 }));
 //ログイン (ユーザー名とパスワードからトークン発行)
 app.post("/users/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
