@@ -35,8 +35,14 @@ app.listen(port, () => {
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 });
-//一覧取得
-app.get('/rendagame', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get('/score.html', (req, res) => {
+    res.sendFile(__dirname + '/public/score.html');
+});
+app.get('/ranking.html', (req, res) => {
+    res.sendFile(__dirname + '/public/ranking.html');
+});
+//1ユーザーのスコア一覧取得
+app.get('/score', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //アクセストークン確認
     const accessToken = req.header('access-token');
     //トークンなし検出
@@ -99,8 +105,8 @@ app.get('/rendagame', (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
     return res.json(array);
 }));
-//新規作成
-app.post('/rendagame', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+//スコア新規作成
+app.post('/score', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const score = req.body.score;
     //アクセストークン確認
     const accessToken = req.header('access-token');
@@ -132,6 +138,42 @@ app.post('/rendagame', (req, res) => __awaiter(void 0, void 0, void 0, function*
         },
     });
     return res.json(result);
+}));
+//全スコア一覧取得
+app.get('/ranking', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    //スコア取得(降順)
+    const scores = yield prisma.score_ranking.findMany({
+        orderBy: {
+            score: "desc",
+        },
+    });
+    if (scores.length <= 0) {
+        return res.json({});
+    }
+    //結合して出力
+    const count = scores.length;
+    var array = [];
+    for (var i = 0; i < count; i++) {
+        //名前取得
+        var name = yield prisma.users.findFirst({
+            where: {
+                ID: scores[i].user_id,
+            },
+        }).then(function (rows) {
+            if (rows != null) {
+                return rows.name;
+            }
+            else {
+                return null;
+            }
+        });
+        if (name == null || name == undefined) {
+            name = "Anonymous";
+        }
+        var json = { "name": name, "score": scores[i].score };
+        array.push(json);
+    }
+    return res.json(array);
 }));
 //新規ユーザー登録
 app.post("/users/new", (req, res) => __awaiter(void 0, void 0, void 0, function* () {

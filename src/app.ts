@@ -27,6 +27,14 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 })
 
+app.get('/score.html', (req, res) => {
+    res.sendFile(__dirname + '/public/score.html');
+})
+
+app.get('/ranking.html', (req, res) => {
+    res.sendFile(__dirname + '/public/ranking.html');
+})
+
 //1ユーザーのスコア一覧取得
 app.get('/score', async (req, res) => {
     //アクセストークン確認
