@@ -208,6 +208,18 @@ app.post("/users/new", async (req, res) => {
         return res.json({signup_status: 3});
     }
 
+    //ユーザーが存在しているかチェック
+    var users = await prisma.users.findMany({
+        where: {
+            name: name
+        },
+    });
+
+    //見つかったらエラーとしてリターン
+    if (users.length > 0){
+        return res.json({signup_status: 4});
+    }
+
     try{
         const result = await prisma.users.create({
             data: {
