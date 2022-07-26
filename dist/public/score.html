@@ -7,12 +7,21 @@
 <script>
 $(function(){
     $('#btn1').click(function(){
+        if ($("#username").val().length < 4){
+            $('#p1').html("ユーザー名は4文字以上です。");
+            return;
+        }
+        else if ($("#password").val().length < 4){
+            $('#p1').html("パスワードは4文字以上です。");
+            return;
+        }
+
         $.ajax({
             url: 'https://renda-game.herokuapp.com/users/login',
             type: 'post',
             data: {
-                "name": "kousi",
-                "password": "kousi504",
+                "name": $("#username").val(),
+                "password": $("#password").val(),
             }
         }).done(function(data){
             $.ajax({
@@ -27,7 +36,13 @@ $(function(){
                         text += ((i + 1) + ". " + json[i].name + " Score:" + json[i].score + "<br>");
                     }
                 $('#p1').html(text);
+            }).fail(function(){
+                $('#p1').html("スコアの取得に失敗しました。<br>時間をおいて再度お試しください。");
+                return;
             });
+        }).fail(function(){
+            $('#p1').html("ログインに失敗しました。<br>ユーザー名かパスワードが違います。");
+            return;
         });
     });
 });
@@ -35,6 +50,12 @@ $(function(){
 </head>
 <body>
     <h1>個人スコア</h1>
+    <p>ユーザー名</p>
+    <input type="text" id="username" maxlength="20">
+    <p>パスワード</p>
+    <input type="text" id="password" maxlength="20">
+    <br>
+    <br>
     <input type="button" id="btn1" value="GET">
     <p id="p1"></p>
 </body>

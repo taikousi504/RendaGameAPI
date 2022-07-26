@@ -233,7 +233,7 @@ app.post("/users/new", async (req, res) => {
         //何らかのエラー
         return res.json({signup_status: 0});
     }
-    
+
     //登録成功
     return res.json({signup_status: 1});
 });
